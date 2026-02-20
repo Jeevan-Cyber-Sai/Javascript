@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Pose } from '@mediapipe/pose';
-import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
-import { POSE_CONNECTIONS } from '@mediapipe/pose';
+import { drawLandmarks } from '@mediapipe/drawing_utils';
 
 interface PoseDetectorProps {
   onHandPosition: (isGoodPosition: boolean) => void;
@@ -49,11 +48,7 @@ export default function PoseDetector({ onHandPosition, videoRef }: PoseDetectorP
       ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
 
       if (results.poseLandmarks) {
-        // Draw pose landmarks
-        drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, {
-          color: '#00FF00',
-          lineWidth: 2,
-        });
+        // Draw pose landmarks (points only for lightweight overlay)
         drawLandmarks(ctx, results.poseLandmarks, {
           color: '#FF0000',
           lineWidth: 1,
