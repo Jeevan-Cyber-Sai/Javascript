@@ -1,0 +1,103 @@
+import { Language } from './store';
+
+export const translations = {
+  en: {
+    appTitle: 'AR Health Awareness & First-Aid Guide',
+    tagline: 'Turn every smartphone into a life-saving assistant',
+    login: 'Login',
+    signup: 'Sign Up',
+    email: 'Email',
+    password: 'Password',
+    name: 'Name',
+    emergencyCall: 'Emergency Call',
+    selectEmergency: 'Select Emergency Type',
+    cpr: 'CPR',
+    choking: 'Choking',
+    bleeding: 'Bleeding',
+    burns: 'Burns',
+    startAR: 'Start AR Guidance',
+    cprInstructions: {
+      step1: 'Check for responsiveness',
+      step2: 'Call emergency services',
+      step3: 'Place hands on center of chest',
+      step4: 'Push hard and fast (100-120 BPM)',
+      step5: 'Continue until help arrives',
+    },
+    goodPosition: 'Good position',
+    moveHands: 'Move hands to center',
+    helpArriving: 'Help arriving in',
+    minutes: 'minutes',
+    repeatInstructions: 'Repeat Instructions',
+    stopAR: 'Stop AR',
+    back: 'Back',
+  },
+  hi: {
+    appTitle: 'AR स्वास्थ्य जागरूकता और प्राथमिक चिकित्सा गाइड',
+    tagline: 'हर स्मार्टफोन को जीवन रक्षक सहायक में बदलें',
+    login: 'लॉगिन',
+    signup: 'साइन अप',
+    email: 'ईमेल',
+    password: 'पासवर्ड',
+    name: 'नाम',
+    emergencyCall: 'आपातकालीन कॉल',
+    selectEmergency: 'आपातकालीन प्रकार चुनें',
+    cpr: 'CPR',
+    choking: 'दम घुटना',
+    bleeding: 'रक्तस्राव',
+    burns: 'जलन',
+    startAR: 'AR मार्गदर्शन शुरू करें',
+    cprInstructions: {
+      step1: 'प्रतिक्रिया की जांच करें',
+      step2: 'आपातकालीन सेवाओं को कॉल करें',
+      step3: 'हाथों को छाती के केंद्र पर रखें',
+      step4: 'कठोर और तेजी से धक्का दें (100-120 BPM)',
+      step5: 'मदद आने तक जारी रखें',
+    },
+    goodPosition: 'अच्छी स्थिति',
+    moveHands: 'हाथों को केंद्र में ले जाएं',
+    helpArriving: 'मदद आ रही है',
+    minutes: 'मिनट',
+    repeatInstructions: 'निर्देश दोहराएं',
+    stopAR: 'AR बंद करें',
+    back: 'वापस',
+  },
+  ta: {
+    appTitle: 'AR சுகாதார விழிப்புணர்வு & முதல் உதவி வழிகாட்டி',
+    tagline: 'ஒவ்வொரு ஸ்மார்ட்போனையும் உயிர் காப்பாளர் உதவியாளராக மாற்றுங்கள்',
+    login: 'உள்நுழை',
+    signup: 'பதிவு செய்',
+    email: 'மின்னஞ்சல்',
+    password: 'கடவுச்சொல்',
+    name: 'பெயர்',
+    emergencyCall: 'அவசர அழைப்பு',
+    selectEmergency: 'அவசர வகையைத் தேர்ந்தெடுக்கவும்',
+    cpr: 'CPR',
+    choking: 'சாக்கிங்',
+    bleeding: 'இரத்தப்போக்கு',
+    burns: 'தீக்காயங்கள்',
+    startAR: 'AR வழிகாட்டுதலைத் தொடங்கவும்',
+    cprInstructions: {
+      step1: 'பதிலளிப்பை சரிபார்க்கவும்',
+      step2: 'அவசர சேவைகளை அழைக்கவும்',
+      step3: 'கைகளை மார்பின் மையத்தில் வைக்கவும்',
+      step4: 'கடினமாகவும் வேகமாகவும் தள்ளுங்கள் (100-120 BPM)',
+      step5: 'உதவி வரும் வரை தொடரவும்',
+    },
+    goodPosition: 'நல்ல நிலை',
+    moveHands: 'கைகளை மையத்திற்கு நகர்த்தவும்',
+    helpArriving: 'உதவி வருகிறது',
+    minutes: 'நிமிடங்கள்',
+    repeatInstructions: 'வழிமுறைகளை மீண்டும் செய்யவும்',
+    stopAR: 'AR நிறுத்தவும்',
+    back: 'பின்',
+  },
+};
+
+export const getTranslation = (lang: Language, key: string): string => {
+  const keys = key.split('.');
+  let value: any = translations[lang];
+  for (const k of keys) {
+    value = value?.[k];
+  }
+  return value || translations.en[key as keyof typeof translations.en] || key;
+};
