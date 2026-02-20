@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Pose } from '@mediapipe/pose';
-import { Camera } from '@mediapipe/camera_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { POSE_CONNECTIONS } from '@mediapipe/pose';
 
@@ -22,6 +21,8 @@ export default function PoseDetector({ onHandPosition, videoRef }: PoseDetectorP
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    let rafId: number | null = null;
+    let isCancelled = false;
 
     // Initialize MediaPipe Pose
     const pose = new Pose({
@@ -107,22 +108,36 @@ export default function PoseDetector({ onHandPosition, videoRef }: PoseDetectorP
 
     poseRef.current = pose;
 
-    // Initialize camera
-    const camera = new Camera(videoRef.current, {
-      onFrame: async () => {
-        if (videoRef.current && poseRef.current) {
-          await poseRef.current.send({ image: videoRef.current });
-        }
-      },
-      width: 640,
-      height: 480,
-    });
+    const syncCanvasSize = () => {
+      const video = videoRef.current;
+      if (!video) return;
+      const w = video.videoWidth || 640;
+      const h = video.videoHeight || 480;
+      if (canvas.width !== w) canvas.width = w;
+      if (canvas.height !== h) canvas.height = h;
+    };
 
-    camera.start();
-    setIsInitialized(true);
+    const processFrame = async () => {
+      if (isCancelled) return;
+      const video = videoRef.current;
+      const poseApi = poseRef.current;
+      if (video && poseApi && video.readyState >= 2) {
+        syncCanvasSize();
+        try {
+          await poseApi.send({ image: video });
+          if (!isInitialized) setIsInitialized(true);
+        } catch {
+          // ignore transient frame errors
+        }
+      }
+      rafId = requestAnimationFrame(processFrame);
+    };
+
+    rafId = requestAnimationFrame(processFrame);
 
     return () => {
-      camera.stop();
+      isCancelled = true;
+      if (rafId !== null) cancelAnimationFrame(rafId);
       pose.close();
     };
   }, [videoRef, onHandPosition]);
