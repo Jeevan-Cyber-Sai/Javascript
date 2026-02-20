@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { drawLandmarks } from '@mediapipe/drawing_utils';
 
 interface PoseDetectorProps {
   onHandPosition: (isGoodPosition: boolean) => void;
@@ -66,13 +65,6 @@ export default function PoseDetector({ onHandPosition, videoRef }: PoseDetectorP
           ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
 
           if (results.poseLandmarks) {
-            // Draw pose landmarks (points only for lightweight overlay)
-            drawLandmarks(ctx, results.poseLandmarks as any, {
-              color: '#FF0000',
-              lineWidth: 1,
-              radius: 3,
-            });
-
             // Check hand position relative to chest
             // Landmarks: 11 = left shoulder, 12 = right shoulder, 23 = left hip, 24 = right hip
             // 15 = left wrist, 16 = right wrist
