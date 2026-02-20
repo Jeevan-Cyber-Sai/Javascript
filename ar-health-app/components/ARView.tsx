@@ -137,15 +137,15 @@ export default function ARView({ emergencyType, onClose, onHandPosition }: ARVie
     };
   }, [emergencyType]);
 
-  const handleResize = () => {
-    if (containerRef.current && canvasRef.current) {
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-      // Resize logic would go here
-    }
-  };
-
   useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current && canvasRef.current) {
+        const width = containerRef.current.clientWidth;
+        const height = containerRef.current.clientHeight;
+        // Resize logic would go here; renderer uses these dimensions on init
+      }
+    };
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -166,7 +166,7 @@ export default function ARView({ emergencyType, onClose, onHandPosition }: ARVie
         />
         
         {/* MediaPipe Pose Detection for CPR */}
-        {emergencyType === 'cpr' && videoRef.current && onHandPosition !== undefined ? (
+        {emergencyType === 'cpr' && onHandPosition !== undefined ? (
           <PoseDetector videoRef={videoRef} onHandPosition={onHandPosition!} />
         ) : null}
         

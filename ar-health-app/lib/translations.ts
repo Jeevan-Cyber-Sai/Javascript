@@ -95,9 +95,22 @@ export const translations = {
 
 export const getTranslation = (lang: Language, key: string): string => {
   const keys = key.split('.');
-  let value: any = translations[lang];
+  let value: unknown = translations[lang as keyof typeof translations];
   for (const k of keys) {
-    value = value?.[k];
+    if (
+      value &&
+      typeof value === 'object' &&
+      k in (value as Record<string, unknown>)
+    ) {
+      value = (value as Record<string, unknown>)[k];
+    } else {
+      value = undefined;
+      break;
+    }
   }
-  return value || translations.en[key as keyof typeof translations.en] || key;
+  if (typeof value === 'string') {
+    return value;
+  }
+  const fallback = translations.en[key as keyof typeof translations.en];
+  return typeof fallback === 'string' ? fallback : key;
 };

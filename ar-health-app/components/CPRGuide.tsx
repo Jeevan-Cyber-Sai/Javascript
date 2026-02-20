@@ -13,7 +13,7 @@ interface CPRGuideProps {
 export default function CPRGuide({ onClose }: CPRGuideProps) {
   const [showAR, setShowAR] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [bpm, setBpm] = useState(110);
+  const [bpm] = useState(110);
   const [isCompressing, setIsCompressing] = useState(false);
   const [helpArriving, setHelpArriving] = useState(false);
   const [minutesRemaining, setMinutesRemaining] = useState(10);
@@ -53,12 +53,6 @@ export default function CPRGuide({ onClose }: CPRGuideProps) {
     };
   }, []);
 
-  useEffect(() => {
-    if (showAR && synthRef.current) {
-      speakInstructions();
-    }
-  }, [showAR, currentStep, language]);
-
   const speakInstructions = () => {
     if (!synthRef.current) return;
 
@@ -73,6 +67,12 @@ export default function CPRGuide({ onClose }: CPRGuideProps) {
     utteranceRef.current = utterance;
     synthRef.current.speak(utterance);
   };
+
+  useEffect(() => {
+    if (showAR && synthRef.current) {
+      speakInstructions();
+    }
+  }, [showAR, currentStep, language]);
 
   const handleRepeatInstructions = () => {
     speakInstructions();
